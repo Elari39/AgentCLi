@@ -1,0 +1,10 @@
+node_modules
+dist
+.git
+.gitignore
+__pycache__
+_bundle_cache.js
+*.pyc
+.vscode
+.idea
+.claude

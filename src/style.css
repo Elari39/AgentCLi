@@ -1,0 +1,290 @@
+@import 'tailwindcss';
+
+/* ===== 设计 Token：仿 Claude 水墨浅黄 ===== */
+:root {
+  color-scheme: light;
+
+  /* 浅色（纸面 / 水墨 / 珊瑚） */
+  --paper: #faf9f5;
+  --surface: #ffffff;
+  --surface-alt: #f3f1e9;
+  --ink: #2b2b2b;
+  --ink-soft: #5c5b56;
+  --ink-muted: #8a887f;
+  --line: #e7e3d8;
+  --accent: #c96442;
+  --accent-hover: #b5552f;
+  --accent-soft: #faf0ec;
+  --code-bg: #f3f1e9;
+
+  /* 衬线宋体栈（标题用，系统回退，零依赖） */
+  --font-serif: 'Source Han Serif SC', 'Noto Serif SC', 'Songti SC', 'SimSun', Georgia, serif;
+}
+
+/* class-based 暗色模式：由 useTheme 控制 html.dark */
+:root.dark {
+  color-scheme: dark;
+
+  /* 暖墨暗色 */
+  --paper: #262624;
+  --surface: #1f1e1c;
+  --surface-alt: #34322e;
+  --ink: #f0ede4;
+  --ink-soft: #c9c5b8;
+  --ink-muted: #9a978c;
+  --line: #3a3833;
+  --accent: #d97757;
+  --accent-hover: #e08566;
+  --accent-soft: #3a2a22;
+  --code-bg: #34322e;
+}
+
+/* 暴露为 Tailwind 语义工具类：inline 让工具类引用变量本身，从而随暗色媒体查询切换 */
+@theme inline {
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-surface-alt: var(--surface-alt);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-muted: var(--ink-muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+  --color-code-bg: var(--code-bg);
+  --font-serif: var(--font-serif);
+}
+
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', Roboto, Helvetica, Arial, sans-serif;
+  color: var(--ink);
+  background-color: var(--paper);
+  font-feature-settings: 'kern' 1, 'liga' 1;
+}
+
+/* 滚动条美化 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--ink-muted) 50%, transparent);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--ink-muted) 80%, transparent);
+}
+
+/* ===== Markdown 排版 .prose-agent ===== */
+.prose-agent {
+  line-height: 1.75;
+  font-size: 16px;
+  word-break: break-word;
+  color: var(--ink);
+}
+
+.prose-agent h1 {
+  font-family: var(--font-serif);
+  font-size: 1.9rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin: 0 0 1.2rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+}
+
+.prose-agent h2 {
+  font-family: var(--font-serif);
+  font-size: 1.45rem;
+  font-weight: 700;
+  margin: 2.2rem 0 1rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+}
+
+.prose-agent h3 {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 1.8rem 0 0.8rem;
+  color: var(--ink);
+}
+
+.prose-agent h4 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 1.4rem 0 0.6rem;
+  color: var(--ink);
+}
+
+.prose-agent p {
+  margin: 0.8rem 0;
+}
+
+.prose-agent a {
+  color: var(--accent);
+  text-decoration: none;
+}
+.prose-agent a:hover {
+  color: var(--accent-hover);
+  text-decoration: underline;
+}
+
+.prose-agent ul,
+.prose-agent ol {
+  margin: 0.8rem 0;
+  padding-left: 1.6rem;
+}
+.prose-agent ul {
+  list-style: disc;
+}
+.prose-agent ol {
+  list-style: decimal;
+}
+.prose-agent li {
+  margin: 0.3rem 0;
+}
+
+.prose-agent blockquote {
+  margin: 1rem 0;
+  padding: 0.6rem 1rem;
+  border-left: 4px solid var(--accent);
+  background: var(--accent-soft);
+  border-radius: 0 6px 6px 0;
+  color: inherit;
+}
+.prose-agent blockquote p {
+  margin: 0.3rem 0;
+}
+
+.prose-agent table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.95rem;
+  display: block;
+  overflow-x: auto;
+}
+.prose-agent th,
+.prose-agent td {
+  border: 1px solid var(--line);
+  padding: 0.5rem 0.8rem;
+  text-align: left;
+}
+.prose-agent th {
+  background: var(--surface-alt);
+  font-weight: 600;
+}
+.prose-agent tr:nth-child(even) td {
+  background: color-mix(in srgb, var(--surface-alt) 60%, transparent);
+}
+
+.prose-agent img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 0.8rem 0;
+  box-shadow: 0 1px 4px rgba(60, 50, 40, 0.08);
+}
+
+/* Shiki 代码块：保留其 inline style，仅外层间距与复制按钮 */
+.prose-agent pre.shiki {
+  margin: 1rem 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  position: relative;
+}
+.prose-agent pre.shiki code {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  counter-reset: shiki-line;
+}
+
+/* 行号：用 CSS counter，伪元素不在 textContent 中，复制不受影响 */
+.prose-agent pre.shiki .line {
+  counter-increment: shiki-line;
+}
+.prose-agent pre.shiki .line::before {
+  content: counter(shiki-line);
+  display: inline-block;
+  width: 2rem;
+  margin-right: 1rem;
+  text-align: right;
+  color: var(--ink-muted);
+  opacity: 0.45;
+  font-variant-numeric: tabular-nums;
+  user-select: none;
+}
+
+/* 语言标签（左上角，由 MarkdownRenderer 注入） */
+.lang-label {
+  position: absolute;
+  top: 6px;
+  left: 12px;
+  font-size: 12px;
+  color: var(--ink-muted);
+  opacity: 0.6;
+  pointer-events: none;
+  user-select: none;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+
+/* 深色模式：用 Shiki 双主题输出的 --shiki-dark 变量覆写 */
+:root.dark .prose-agent pre.shiki,
+:root.dark .prose-agent pre.shiki span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+}
+/* 行号与语言标签在深色下不要被 Shiki 背景覆盖 */
+:root.dark .prose-agent pre.shiki .line::before,
+:root.dark .prose-agent pre.shiki .lang-label {
+  background-color: transparent !important;
+}
+
+/* 内联代码 */
+.prose-agent :not(pre) > code {
+  background: var(--code-bg);
+  color: var(--ink);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  font-size: 0.9em;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+
+.prose-agent hr {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 1.6rem 0;
+}
+
+/* 代码块复制按钮 */
+.copy-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  padding: 2px 8px;
+  font-size: 12px;
+  color: var(--ink-muted);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.prose-agent pre.shiki:hover .copy-btn {
+  opacity: 1;
+}
+.copy-btn:hover {
+  background: var(--surface-alt);
+}
