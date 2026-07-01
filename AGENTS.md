@@ -37,8 +37,8 @@ pnpm preview      # 预览生产构建
 
 ```bash
 docker build -t meow-agent-docs .
-docker run -d -p 8080:80 --name agent-docs meow-agent-docs
-# 访问 http://localhost:8080
+docker run -d -p 2671:80 --name agent-docs meow-agent-docs
+# 访问 http://localhost:2671
 ```
 
 ## 约定
