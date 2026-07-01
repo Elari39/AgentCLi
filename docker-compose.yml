@@ -1,0 +1,10 @@
+services:
+  agent-docs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: meow-agent-docs
+    container_name: agent-docs
+    ports:
+      - "2671:80"
+    restart: unless-stopped

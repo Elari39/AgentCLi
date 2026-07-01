@@ -36,9 +36,14 @@ pnpm preview      # 预览生产构建
 ## Docker
 
 ```bash
+# Compose 一键构建并后台启动
+docker compose up -d --build
+# 访问 http://localhost:2671
+docker compose down            # 停止并清理
+
+# 或手动 build/run
 docker build -t meow-agent-docs .
 docker run -d -p 2671:80 --name agent-docs meow-agent-docs
-# 访问 http://localhost:2671
 ```
 
 ## 约定
