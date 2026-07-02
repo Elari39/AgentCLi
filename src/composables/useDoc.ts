@@ -1,12 +1,13 @@
 // 文档加载状态管理：根据 slug 加载 md 内容并渲染为 HTML
 import { ref, watch, type Ref } from 'vue'
 import { docsMap, isLazyDoc, loadVibe } from '../data/docs'
-import { initMarkdown, isMarkdownReady, renderMarkdown } from './useMarkdown'
-import type { DocState } from '../data/types'
+import { initMarkdown, isMarkdownReady, renderMarkdownWithHeadings } from './useMarkdown'
+import type { DocHeading, DocState } from '../data/types'
 
 interface UseDocResult {
   state: Ref<DocState>
   html: Ref<string>
+  headings: Ref<DocHeading[]>
   error: Ref<string>
 }
 
@@ -22,6 +23,7 @@ function ensureMarkdown(): Promise<void> {
 export function useDoc(slugRef: Ref<string | string[] | undefined>): UseDocResult {
   const state = ref<DocState>('loading')
   const html = ref('')
+  const headings = ref<DocHeading[]>([])
   const error = ref('')
   let controller: AbortController | null = null
 
@@ -34,11 +36,13 @@ export function useDoc(slugRef: Ref<string | string[] | undefined>): UseDocResul
       state.value = 'error'
       error.value = '未指定文档'
       html.value = ''
+      headings.value = []
       return
     }
 
     state.value = 'loading'
     html.value = ''
+    headings.value = []
 
     try {
       // 等待 markdown 渲染器就绪
@@ -56,6 +60,7 @@ export function useDoc(slugRef: Ref<string | string[] | undefined>): UseDocResul
         state.value = 'error'
         error.value = `文档不存在：${slug}`
         html.value = ''
+        headings.value = []
         return
       }
 
@@ -65,16 +70,20 @@ export function useDoc(slugRef: Ref<string | string[] | undefined>): UseDocResul
       if (!trimmed) {
         state.value = 'empty'
         html.value = ''
+        headings.value = []
         return
       }
 
-      html.value = renderMarkdown(content)
+      const rendered = renderMarkdownWithHeadings(content)
+      html.value = rendered.html
+      headings.value = rendered.headings
       state.value = 'ready'
     } catch (e) {
       if (controller?.signal.aborted) return
       state.value = 'error'
       error.value = e instanceof Error ? e.message : '加载失败'
       html.value = ''
+      headings.value = []
     }
   }
 
@@ -90,7 +99,7 @@ export function useDoc(slugRef: Ref<string | string[] | undefined>): UseDocResul
     { immediate: true },
   )
 
-  return { state, html, error }
+  return { state, html, headings, error }
 }
 
 export { isMarkdownReady }

@@ -1,7 +1,13 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import Sidebar from './Sidebar.vue'
+import DocToc from './DocToc.vue'
 import { useTheme } from '../composables/useTheme'
+import type { DocHeading } from '../data/types'
+
+const props = defineProps<{
+  headings: DocHeading[]
+}>()
 
 const sidebarOpen = ref(false)
 
@@ -11,6 +17,15 @@ const sidebarCollapsed = ref(localStorage.getItem(SIDEBAR_KEY) === 'collapsed')
 watch(sidebarCollapsed, (v) => {
   localStorage.setItem(SIDEBAR_KEY, v ? 'collapsed' : 'expanded')
 })
+
+// 文章右侧目录收起态：跨刷新记忆
+const DOC_TOC_KEY = 'meow-doc-toc'
+const docTocCollapsed = ref(localStorage.getItem(DOC_TOC_KEY) === 'collapsed')
+watch(docTocCollapsed, (v) => {
+  localStorage.setItem(DOC_TOC_KEY, v ? 'collapsed' : 'expanded')
+})
+
+const hasDocToc = computed(() => props.headings.length > 0)
 
 const { theme, toggle } = useTheme()
 </script>
@@ -67,8 +82,21 @@ const { theme, toggle } = useTheme()
           </svg>
         </button>
         <span class="text-sm text-ink-muted">MewCode Agent 课程文档</span>
+        <!-- 桌面宽屏：收起/展开文章内目录 -->
         <button
-          class="ml-auto rounded p-1.5 text-ink-muted hover:bg-surface-alt"
+          v-if="hasDocToc"
+          class="ml-auto hidden rounded p-1.5 text-ink-muted hover:bg-surface-alt xl:inline-flex"
+          @click="docTocCollapsed = !docTocCollapsed"
+          :aria-label="docTocCollapsed ? '展开本文目录' : '收起本文目录'"
+          :title="docTocCollapsed ? '展开本文目录' : '收起本文目录'"
+        >
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6.75h10M4 12h10M4 17.25h10M18 7.5l2.25 2.25L18 12m2.25 2.25L18 16.5" />
+          </svg>
+        </button>
+        <button
+          class="rounded p-1.5 text-ink-muted hover:bg-surface-alt"
+          :class="hasDocToc ? 'ml-auto xl:ml-0' : 'ml-auto'"
           @click="toggle"
           :aria-label="theme === 'dark' ? '切换为浅色' : '切换为深色'"
         >
@@ -85,8 +113,21 @@ const { theme, toggle } = useTheme()
 
       <!-- 内容 -->
       <main class="flex-1 overflow-y-auto">
-        <div class="mx-auto max-w-4xl px-5 py-8 md:px-8">
-          <slot />
+        <div
+          class="mx-auto flex w-full gap-8 px-5 py-8 md:px-8"
+          :class="hasDocToc && !docTocCollapsed ? 'max-w-4xl xl:max-w-7xl' : 'max-w-4xl'"
+        >
+          <div
+            class="min-w-0 flex-1"
+            :class="hasDocToc && !docTocCollapsed ? 'xl:max-w-4xl' : ''"
+          >
+            <slot />
+          </div>
+          <DocToc
+            v-if="hasDocToc && !docTocCollapsed"
+            class="hidden xl:block"
+            :headings="headings"
+          />
         </div>
       </main>
     </div>

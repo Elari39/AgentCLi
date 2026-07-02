@@ -24,3 +24,13 @@ export type NavNode = NavGroup
 
 /** 文档加载状态 */
 export type DocState = 'loading' | 'error' | 'empty' | 'ready'
+
+/** 文章右侧目录标题 */
+export interface DocHeading {
+  /** 标题对应的 DOM id */
+  id: string
+  /** 目录展示层级：只收集正文 H2/H3 */
+  level: 2 | 3
+  /** 标题纯文本 */
+  text: string
+}

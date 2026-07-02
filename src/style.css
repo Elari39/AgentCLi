@@ -119,6 +119,11 @@ body {
   color: var(--ink);
 }
 
+.prose-agent h2,
+.prose-agent h3 {
+  scroll-margin-top: 5rem;
+}
+
 .prose-agent h4 {
   font-size: 1.05rem;
   font-weight: 600;
@@ -196,69 +201,110 @@ body {
   box-shadow: 0 1px 4px rgba(60, 50, 40, 0.08);
 }
 
-/* Shiki 代码块：保留其 inline style，仅外层间距与复制按钮 */
+/* Shiki 代码块：保留其语义色彩，强化容器、行号、操作区可读性 */
 .prose-agent pre.shiki {
-  margin: 1rem 0;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  overflow-x: auto;
-  font-size: 0.875rem;
+  margin: 1.25rem 0;
+  border: 1px solid color-mix(in srgb, var(--line) 82%, var(--ink-muted));
+  border-radius: 12px;
+  overflow: auto;
+  font-size: 0.9rem;
+  line-height: 1.65;
   position: relative;
+  box-shadow:
+    0 10px 28px rgba(60, 50, 40, 0.08),
+    inset 0 1px 0 color-mix(in srgb, var(--surface) 85%, transparent);
+  scrollbar-gutter: stable;
+  tab-size: 2;
 }
 .prose-agent pre.shiki code {
-  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  display: block;
+  min-width: max-content;
+  padding: 2.55rem 1.1rem 1.1rem 0;
+  font-family: 'SFMono-Regular', 'Cascadia Code', Consolas, 'Liberation Mono', Menlo, monospace;
   counter-reset: shiki-line;
 }
 
 /* 行号：用 CSS counter，伪元素不在 textContent 中，复制不受影响 */
 .prose-agent pre.shiki .line {
+  display: block;
+  min-height: 1.65em;
+  padding-right: 1.25rem;
   counter-increment: shiki-line;
 }
 .prose-agent pre.shiki .line::before {
   content: counter(shiki-line);
   display: inline-block;
-  width: 2rem;
-  margin-right: 1rem;
+  width: 2.8rem;
+  margin-right: 1.15rem;
+  padding-left: 0.35rem;
   text-align: right;
-  color: var(--ink-muted);
-  opacity: 0.45;
+  color: color-mix(in srgb, var(--ink-muted) 76%, transparent);
   font-variant-numeric: tabular-nums;
   user-select: none;
 }
 
 /* 语言标签（左上角，由 MarkdownRenderer 注入） */
-.lang-label {
+.prose-agent pre.shiki .lang-label {
   position: absolute;
-  top: 6px;
-  left: 12px;
-  font-size: 12px;
-  color: var(--ink-muted);
-  opacity: 0.6;
+  top: 0.6rem;
+  left: 0.75rem;
+  z-index: 1;
+  padding: 0.12rem 0.45rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--line));
+  border-radius: 999px;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--surface) 86%, transparent);
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   pointer-events: none;
   user-select: none;
-  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-family: 'SFMono-Regular', 'Cascadia Code', Consolas, 'Liberation Mono', Menlo, monospace;
 }
 
 /* 深色模式：用 Shiki 双主题输出的 --shiki-dark 变量覆写 */
 :root.dark .prose-agent pre.shiki,
-:root.dark .prose-agent pre.shiki span {
+:root.dark .prose-agent pre.shiki code {
   color: var(--shiki-dark) !important;
   background-color: var(--shiki-dark-bg) !important;
 }
-/* 行号与语言标签在深色下不要被 Shiki 背景覆盖 */
-:root.dark .prose-agent pre.shiki .line::before,
-:root.dark .prose-agent pre.shiki .lang-label {
+:root.dark .prose-agent pre.shiki span:not(.lang-label) {
+  color: var(--shiki-dark) !important;
+}
+/* 行号在深色下不要被 Shiki 背景覆盖 */
+:root.dark .prose-agent pre.shiki .line::before {
   background-color: transparent !important;
+}
+
+:root.dark .prose-agent pre.shiki .lang-label {
+  background: color-mix(in srgb, var(--surface) 88%, var(--accent-soft)) !important;
+  border-color: color-mix(in srgb, var(--accent) 34%, var(--line));
+}
+
+.prose-agent pre.shiki .line.highlighted {
+  background: color-mix(in srgb, var(--accent-soft) 70%, transparent);
+}
+
+.prose-agent pre.shiki .line.diff.add {
+  background: color-mix(in srgb, #16a34a 12%, transparent);
+}
+
+.prose-agent pre.shiki .line.diff.remove {
+  background: color-mix(in srgb, #dc2626 12%, transparent);
 }
 
 /* 内联代码 */
 .prose-agent :not(pre) > code {
   background: var(--code-bg);
-  color: var(--ink);
-  padding: 0.15em 0.4em;
-  border-radius: 4px;
+  color: color-mix(in srgb, var(--accent) 72%, var(--ink));
+  padding: 0.16em 0.42em;
+  border: 1px solid color-mix(in srgb, var(--line) 78%, transparent);
+  border-radius: 6px;
   font-size: 0.9em;
-  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-family: 'SFMono-Regular', 'Cascadia Code', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-weight: 600;
 }
 
 .prose-agent hr {
@@ -268,23 +314,36 @@ body {
 }
 
 /* 代码块复制按钮 */
-.copy-btn {
+.prose-agent pre.shiki .copy-btn {
   position: absolute;
-  top: 6px;
-  right: 6px;
-  padding: 2px 8px;
-  font-size: 12px;
-  color: var(--ink-muted);
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 4px;
+  top: 0.55rem;
+  right: 0.6rem;
+  z-index: 2;
+  padding: 0.18rem 0.55rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  border: 1px solid color-mix(in srgb, var(--line) 85%, var(--ink-muted));
+  border-radius: 999px;
   cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.15s;
+  opacity: 0.72;
+  transition:
+    opacity 0.15s,
+    color 0.15s,
+    background-color 0.15s,
+    border-color 0.15s;
 }
-.prose-agent pre.shiki:hover .copy-btn {
+.prose-agent pre.shiki:hover .copy-btn,
+.prose-agent pre.shiki:focus-within .copy-btn {
   opacity: 1;
 }
-.copy-btn:hover {
-  background: var(--surface-alt);
+.prose-agent pre.shiki .copy-btn:hover {
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-color: color-mix(in srgb, var(--accent) 46%, var(--line));
+}
+.prose-agent pre.shiki .copy-btn:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--accent) 72%, transparent);
+  outline-offset: 2px;
 }

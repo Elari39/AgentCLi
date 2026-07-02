@@ -1,6 +1,6 @@
 # 🎯 必读｜MewCode 课程学习攻略
 
-派大星 6月13日修改
+派大星 7月2日修改
 
 ![MewCode 的 14 天全链路学习路线图](images/intro/learning-roadmap.png)
 
@@ -13,6 +13,13 @@
 整个学习路线分为四个阶段，每个阶段都对应专栏的章节设计，有明确的学习目标和面试价值，贴合从新手到能面试、能落地的成长节奏。
 
 源码下载和环境搭建请参考：[📄 Jimecode Agent 源码下载](source-download.md)
+
+## 实战成品项目
+
+[实战成品项目
+Claude Session Viewer
+先看一个完整可用的 AI CLI 会话管理工具，理解真实 Agent 产品如何管理历史、搜索、恢复会话和统计成本。
+查看项目介绍](showcase-project.md)
 
 ## 第一阶段：看懂全貌
 

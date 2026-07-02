@@ -9,7 +9,7 @@ import DocState from '../components/DocState.vue'
 
 const route = useRoute()
 const slugRef = computed(() => route.params.slug)
-const { state, html, error } = useDoc(slugRef)
+const { state, html, headings, error } = useDoc(slugRef)
 
 const adjacent = computed(() => {
   const slug = slugRef.value
@@ -26,7 +26,7 @@ const currentTitle = computed(() => {
 </script>
 
 <template>
-  <DocLayout>
+  <DocLayout :headings="state === 'ready' ? headings : []">
     <!-- 标题 -->
     <div v-if="currentTitle && state === 'ready'" class="mb-6 text-xs text-ink-muted">
       {{ currentTitle }}

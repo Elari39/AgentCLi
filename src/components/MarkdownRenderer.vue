@@ -28,15 +28,31 @@ function injectCopyButtons(root: HTMLElement) {
     if (pre.querySelector('.copy-btn')) return
     // 复制按钮
     const btn = document.createElement('button')
+    btn.type = 'button'
     btn.className = 'copy-btn'
     btn.textContent = '复制'
+    btn.title = '复制代码'
+    btn.setAttribute('aria-label', '复制代码')
     btn.addEventListener('click', () => {
       const code = pre.querySelector('code')
       const text = code ? code.textContent ?? '' : pre.textContent ?? ''
       navigator.clipboard.writeText(text).then(() => {
         btn.textContent = '已复制'
+        btn.title = '已复制'
+        btn.setAttribute('aria-label', '已复制')
         setTimeout(() => {
           btn.textContent = '复制'
+          btn.title = '复制代码'
+          btn.setAttribute('aria-label', '复制代码')
+        }, 1500)
+      }).catch(() => {
+        btn.textContent = '复制失败'
+        btn.title = '复制失败'
+        btn.setAttribute('aria-label', '复制失败')
+        setTimeout(() => {
+          btn.textContent = '复制'
+          btn.title = '复制代码'
+          btn.setAttribute('aria-label', '复制代码')
         }, 1500)
       })
     })
